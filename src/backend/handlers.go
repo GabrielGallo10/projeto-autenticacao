@@ -5,12 +5,19 @@ import (
     "net/http"
 )
 
-type Usuario struct {
+// Structs
+type RegisterUser struct {
 	Name string `json:"name"`
 	Email string `json:"email"`
 	Password string `json:"password"`
 }
 
+type LoginUser struct {
+	Email string `json:"email"`
+	Password string `json:"password"`
+}
+
+// Endpoint de registro
 func registerHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Access-Control-Allow-Origin", "*")
 	w.Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS")
@@ -25,17 +32,37 @@ func registerHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	var user Usuario
+	var user RegisterUser
 	err := json.NewDecoder(r.Body).Decode(&user)
 	if err != nil {
-		http.Error(w, "Erro ao ler dados", http.StatusBadRequest)
+		http.Error(w, "Dados inválidos", http.StatusBadRequest)
 		return
 	}
 
-	hashedPassword := hashPassword(user.Password)
+	if user.Name == "" || user.Email == "" || user.Password == "" {
+		http.Error(w, "Todos os campos são obrigatórios", http.StatusBadRequest)
+		return
+	}
+
+	if len(user.Password) < 6 {
+		http.Error(w, "Senha deve ter pelo menos 6 caracteres", http.StatusBadRequest)
+		return
+	}
+
+	if !isValidEmail(user.Email) {
+		http.Error(w, "Email inválido", http.StatusBadRequest)
+		return
+	}
+
+	hashedPassword, err := hashPassword(user.Password)
+	if err != nil {
+		http.Error(w, "Erro interno", http.StatusInternalServerError)
+		return
+	}
+
 	_, err = db.Exec("INSERT INTO users(name, email, password) VALUES (?, ?, ?)", user.Name, user.Email, hashedPassword)
 	if err != nil {
-		http.Error(w, "Erro ao salvar usuário: usuário já cadastrado", http.StatusInternalServerError)
+		http.Error(w, "Usuário já cadastrado", http.StatusConflict)
 		return
 	}
 
@@ -43,6 +70,27 @@ func registerHandler(w http.ResponseWriter, r *http.Request) {
 	w.Write([]byte("Usuário cadastrado com sucesso!"))
 }
 
+// Validação de email
+func isValidEmail(email string) bool {
+	if len(email) < 5 {
+		return false
+	}
+
+	arroba := false
+	ponto := false
+	for _, c := range email {
+		if c == '@' {
+			arroba = true
+		}
+		if c == '.' {
+			ponto = true
+		}
+	}
+
+	return arroba && ponto
+}
+
+// Endpoint de login
 func loginHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Access-Control-Allow-Origin", "*")
 	w.Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS")
@@ -57,25 +105,26 @@ func loginHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	var user Usuario
+	var user LoginUser
 	err := json.NewDecoder(r.Body).Decode(&user)
 	if err != nil {
-		http.Error(w, "Erro ao ler dados", http.StatusBadRequest)
+		http.Error(w, "Dados inválidos", http.StatusBadRequest)
         return
+	}
+
+	if user.Email == "" || user.Password == "" {
+		http.Error(w, "Todos os campos são obrigatórios", http.StatusBadRequest)
+		return
 	}
 
 	row := db.QueryRow("SELECT password FROM users WHERE email = ?", user.Email)
 	var storedHash string
 	err = row.Scan(&storedHash)
-	if err != nil {
-		http.Error(w, "Email ou senha inválidos", http.StatusUnauthorized)
-        return
-	}
-
-	if !checkPassword(storedHash, user.Password) {
+	if err != nil || !checkPassword(storedHash, user.Password){
 		http.Error(w, "Email ou senha inválidos", http.StatusUnauthorized)
         return
 	}
 
 	w.Write([]byte("Login realizado com sucesso!"))
 }
+

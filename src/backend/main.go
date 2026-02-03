@@ -7,9 +7,7 @@ import (
 
 func main() {
 	connectDB()
-	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		w.Write([]byte("API rodando!"))
-	})
+	
 	http.HandleFunc("/register", registerHandler)
 	http.HandleFunc("/login", loginHandler)
 
