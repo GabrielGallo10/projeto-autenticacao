@@ -9,24 +9,21 @@ loginForm.addEventListener("submit", (event) => {
 
     fetch("http://localhost:8080/login", {
         method: "POST",
-        header: {
+        headers: {
             "Content-Type": "application/json"
         },
-        body: JSON.stringify({
-            email: email, 
-            password: password
-        })
-    }).then(response => {
-        if (!response.ok) {
-            throw new Error("Email ou senha inválidos");
-        }
-        return response.text();
-    }).then(data => {
+        body: JSON.stringify({ email, password })
+    })
+    .then(response => response.text())
+    .then(data => {
         message.textContent = data;
-        if (data.includes("sucesso")) {
+
+        if (data.includes("sucesso")) { 
             window.location.href = "pages/dashboard.html";
         }
-    }).catch(error => {
-        message.textContent = error.message;
+    })
+    .catch(error => {
+        console.error(error);
+        message.textContent = "Erro ao conectar com o servidor";
     });
 });
