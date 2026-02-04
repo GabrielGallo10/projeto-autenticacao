@@ -1,0 +1,130 @@
+/* Estilização Container Conteúdo */
+.container-conteudo {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 40%;
+}
+
+.conteudo-titulo {
+    font-size: 4vmax;
+}
+
+.conteudo-paragrafo {
+    font-size: 2.5vmin;
+}
+
+.conteudo-icons {
+    font-size: 4vmin;
+}
+
+/* Estilização Container Form */
+.container-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 40%;
+}
+
+.form-titulo {
+    font-size: 3vmax;
+    text-align: center;
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+    margin: 0 auto;
+    width: 70%;
+}
+
+.form-campos {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 15px;
+}
+
+.form label {
+    font-size: 2.3vmin;
+}
+
+.form input {    
+    margin-top: 2px;
+    margin-bottom: 5px;
+    padding: 10px 10px;
+}
+
+.form button {
+    background-color: #87CEFA;
+    border: none;
+    border-radius: 10px;
+    font-size: 2.3vmin;
+    font-weight: 600;
+    margin: 0 auto;
+    margin-top: 10px;
+    padding: 10px;
+    width: 50%;
+}
+
+.navegacao {
+    font-size: 2vmin;
+    text-align: center;
+}
+
+/* Estilização das Validações */
+.mensagem-error {
+    background-color: red;
+    border-radius: 10px;
+    color: #fff;
+    display: none;
+    font-size: 1.5vmin;
+    padding: 10px;
+    width: 100%;
+}
+
+.dados-invalidos {
+    margin: 0 auto;
+    width: 70%;
+}
+
+.mensagem-ativo {
+    display: block;
+}
+
+.input-error_ativo {
+    border: 2px solid red;
+    box-shadow: 0 0 8px rgba(231, 76, 60, 0.6);
+}
+
+.toast {
+    background: #e74c3c;
+    border-radius: 8px;
+    box-shadow: 0 8px 20px rgba(0,0,0,.25);
+    color: #fff;
+    font-size: 14px;
+    opacity: 0;
+    padding: 14px 18px;
+    pointer-events: none;
+    position: fixed;
+    right: 20px;
+    top: 20px;
+    transform: translateY(-10px);
+    transition: opacity .3s ease, transform .3s ease;
+    z-index: 9999;
+}
+
+.toast.mostrar {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Responsividade */
+@media(max-width: 1000px) {
+    .container-conteudo {
+        width: 70%;
+    }
+    
+    .container-form {
+        width: 70%;
+    }
+}

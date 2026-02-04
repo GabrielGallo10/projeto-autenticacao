@@ -1,38 +1,56 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <!-- Font do Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet" />
+
+    <!-- Ícones -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Register Page</title>
 
-    <link rel="stylesheet" href="../style/style.css" />
+    <link rel="stylesheet" href="../style/reset.css" />
+    <link rel="stylesheet" href="../style/common.css" />
+    <link rel="stylesheet" href="../style/register.css" />
 </head>
-<body>
-    <div class="container">
-        <h1 class="titulo">Registrar-se</h1>
-        <h3 id="message"></h3>
-        <form id="register-form" class="form-container">
-            <div class="campos">
-                <label for="name">Nome:</label>
-                <input type="text" id="name" name="name" placeholder="user" />
+<body> 
+    <div class="container-form">
+        <h2 class="form-titulo">Cadastrar-se</h2>
+        <form id="register-form" class="form">
+            <div class="form-campos">  
+                <label for="name">Nome</label>
+                <input type="text" name="name" id="name" />
+                <p class="mensagem-error" id="mensagem-nome"></p>
             </div>
-            <div class="campos">
-                <label for="email">Email:</label>
-                <input type="email" id="email" name="email" placeholder="user@email.com" />
+            <div class="form-campos">
+                <label for="email">Endereço de email</label>
+                <input type="email" name="email" id="email" />
+                <p class="mensagem-error" id="mensagem-email"></p>
             </div>
-            <div class="campos">
-                <label for="password">Senha:</label>
-                <input type="password" id="password" name="password" placeholder="******" />
+            <div class="form-campos">
+                <label for="password">Senha</label>
+                <input type="password" name="password" id="password" />
+                <p class="mensagem-error" id="mensagem-senha"></p>
             </div>
-            <button type="submit">REGISTRAR-SE</button> 
+            <button type="submit">Criar Conta</button>
         </form>
-        <a href="../index.html" class="navegar">ENTRAR</a>
+        <p class="navegacao">Já tem uma conta? <a href="../index.html">Faça login</a></p>
     </div>
+    <div class="container-conteudo">
+        <h1 class="conteudo-titulo">Comece sua jornada</h1>
+        <p class="conteudo-paragrafo">Cada passo dado hoje constrói as histórias de amanhã. Cadastre-se e desbloqueie caminhos que levam à conexão com a natureza, ao movimento e à liberdade de viver novas experiências.</p>
+        <div class="conteudo-icons">
+            <a href="#"><i class="fa-brands fa-instagram"></i></a>
+            <a href="#"><i class="fa-brands fa-github"></i></a>
+            <a href="#"><i class="fa-brands fa-linkedin"></i></a>
+        </div>
+    </div>
+    <div id="toast" class="toast"></div>
 
-    <script src="../js/register.js"></script>
+    <script type="module" src="../js/register.js"></script>
 </body>
 </html>

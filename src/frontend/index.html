@@ -1,34 +1,51 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <!-- Font do Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet" />
+
+    <!-- Ícones -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Login Page</title>
 
-    <link rel="stylesheet" href="./style/style.css" />
+    <link rel="stylesheet" href="./style/reset.css" />
+    <link rel="stylesheet" href="./style/common.css" />
 </head>
 <body>
-    <div class="container">
-        <h1 class="titulo">Entrar</h1>
-        <h3 id="message"></h3>
-        <form id="login-form" class="form-container">
-            <div class="campos">
-                <label for="email">Email:</label>
-                <input type="email" id="email" name="email" placeholder="user@email.com" />
-            </div>
-            <div class="campos">
-                <label for="password">Senha:</label>
-                <input type="password" id="password" name="password" placeholder="******" />
-            </div>
-            <button type="submit">ENTRAR</button>
-        </form>
-        <a href="./pages/register.html" class="navegar">REGISTRAR-SE</a>
+    <div class="container-conteudo">
+        <h1 class="conteudo-titulo">Bem vindo de volta</h1>
+        <p class="conteudo-paragrafo">Cada trilha guarda uma história, um desafio e uma paisagem única. Aqui, você encontra os caminhos que conectam você à natureza, ao movimento e à liberdade de explorar novos horizontes.</p>
+        <div class="conteudo-icons">
+            <a href="#"><i class="fa-brands fa-instagram"></i></a>
+            <a href="#"><i class="fa-brands fa-github"></i></a>
+            <a href="#"><i class="fa-brands fa-linkedin"></i></a>
+        </div>
     </div>
+    <div class="container-form">
+        <h2 class="form-titulo">Entrar</h2>
+        <p class="mensagem-error dados-invalidos" id="mensagem-dados"></p>
+        <form id="login-form" class="form">
+            <div class="form-campos">
+                <label for="email">Endereço de email</label>
+                <input type="email" name="email" id="email" />
+                <p class="mensagem-error" id="mensagem-email"></p>
+            </div>
+            <div class="form-campos">
+                <label for="password">Senha</label>
+                <input type="password" name="password" id="password" />
+                <p class="mensagem-error" id="mensagem-senha"></p>
+            </div>
+            <button type="submit">Entrar</button>
+        </form>
+        <p class="navegacao">Não possui uma conta? <a href="./pages/register.html">Faça seu cadastro</a></p>
+    </div>
+    <div id="toast" class="toast"></div>
 
-    <script src="./js/login.js"></script>
+    <script type="module" src="./js/login.js"></script>
 </body>
 </html>

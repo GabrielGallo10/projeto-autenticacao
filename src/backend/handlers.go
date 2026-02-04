@@ -28,66 +28,51 @@ func registerHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	
 	if r.Method != http.MethodPost {
-		http.Error(w, "Método não permitido", http.StatusMethodNotAllowed)
+		http.Error(w, "Método não permitido!", http.StatusMethodNotAllowed)
 		return
 	}
 
 	var user RegisterUser
 	err := json.NewDecoder(r.Body).Decode(&user)
 	if err != nil {
-		http.Error(w, "Dados inválidos", http.StatusBadRequest)
+		http.Error(w, "Dados inválidos!", http.StatusBadRequest)
 		return
 	}
 
-	if user.Name == "" || user.Email == "" || user.Password == "" {
-		http.Error(w, "Todos os campos são obrigatórios", http.StatusBadRequest)
+	if user.Name == "" {
+		http.Error(w, "Campo nome é obrigatório!", http.StatusBadRequest)
+		return
+	}
+
+	if user.Email == "" {
+		http.Error(w, "Campo email é obrigatório!", http.StatusBadRequest)
+		return
+	}
+
+	if user.Password == "" {
+		http.Error(w, "Campo senha é obrigatório!", http.StatusBadRequest)
 		return
 	}
 
 	if len(user.Password) < 6 {
-		http.Error(w, "Senha deve ter pelo menos 6 caracteres", http.StatusBadRequest)
-		return
-	}
-
-	if !isValidEmail(user.Email) {
-		http.Error(w, "Email inválido", http.StatusBadRequest)
+		http.Error(w, "Senha deve ter pelo menos 6 caracteres!", http.StatusBadRequest)
 		return
 	}
 
 	hashedPassword, err := hashPassword(user.Password)
 	if err != nil {
-		http.Error(w, "Erro interno", http.StatusInternalServerError)
+		http.Error(w, "Erro interno!", http.StatusInternalServerError)
 		return
 	}
 
 	_, err = db.Exec("INSERT INTO users(name, email, password) VALUES (?, ?, ?)", user.Name, user.Email, hashedPassword)
 	if err != nil {
-		http.Error(w, "Usuário já cadastrado", http.StatusConflict)
+		http.Error(w, "Usuário já cadastrado!", http.StatusConflict)
 		return
 	}
 
 	w.WriteHeader(http.StatusCreated)
-	w.Write([]byte("Usuário cadastrado com sucesso!"))
-}
-
-// Validação de email
-func isValidEmail(email string) bool {
-	if len(email) < 5 {
-		return false
-	}
-
-	arroba := false
-	ponto := false
-	for _, c := range email {
-		if c == '@' {
-			arroba = true
-		}
-		if c == '.' {
-			ponto = true
-		}
-	}
-
-	return arroba && ponto
+	w.Write([]byte("Usuário registrado com sucesso!"))
 }
 
 // Endpoint de login
@@ -101,19 +86,24 @@ func loginHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if r.Method != http.MethodPost {
-		http.Error(w, "Método não permitido", http.StatusMethodNotAllowed)
+		http.Error(w, "Método não permitido!", http.StatusMethodNotAllowed)
 		return
 	}
 
 	var user LoginUser
 	err := json.NewDecoder(r.Body).Decode(&user)
 	if err != nil {
-		http.Error(w, "Dados inválidos", http.StatusBadRequest)
+		http.Error(w, "Dados inválidos!", http.StatusBadRequest)
         return
 	}
 
-	if user.Email == "" || user.Password == "" {
-		http.Error(w, "Todos os campos são obrigatórios", http.StatusBadRequest)
+	if user.Email == "" {
+		http.Error(w, "Campo email é obrigatório!", http.StatusBadRequest)
+		return
+	}
+
+	if user.Password == "" {
+		http.Error(w, "Campo senha é obrigatório!", http.StatusBadRequest)
 		return
 	}
 
@@ -121,7 +111,7 @@ func loginHandler(w http.ResponseWriter, r *http.Request) {
 	var storedHash string
 	err = row.Scan(&storedHash)
 	if err != nil || !checkPassword(storedHash, user.Password){
-		http.Error(w, "Email ou senha inválidos", http.StatusUnauthorized)
+		http.Error(w, "Email ou senha incorretos!", http.StatusUnauthorized)
         return
 	}
 

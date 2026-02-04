@@ -1,0 +1,52 @@
+* {
+    box-sizing: border-box;
+    font-family: "Montserrat", sans-serif;
+    margin: 0;
+    padding: 0; 
+}
+
+body {
+    align-items: center;
+    background-image: url("../images/fundo.jpg");
+    background-size: cover;
+    background-position: center;
+    color: #fff;
+    display: flex;
+    gap: 10px;
+    height: 100vh;
+    justify-content: center;
+    padding: 20px;
+}
+
+body::before {
+    background-color: rgba(0, 0, 0, 0.5);
+    content: "";
+    inset: 0;
+    position: absolute;
+    z-index: 0;
+}
+
+body * {
+    z-index: 2;
+}
+
+a {
+    color: #fff;
+}
+
+input {
+    border-radius: 8px;
+    border: none;
+    box-shadow: none;
+    outline: none;
+}
+
+/* Responsividade */
+@media(max-width: 1000px) {
+    body { 
+        flex-direction: column;
+        gap: 30px;
+        text-align: center;
+    }
+}
+

@@ -1,0 +1,14 @@
+.container-conteudo {
+    text-align: end;
+}
+
+@media(max-width: 1000px) {
+    .container-form {
+        order: 2;
+    }
+
+    .container-conteudo {
+        order: 1;
+        text-align: center;
+    }
+}
