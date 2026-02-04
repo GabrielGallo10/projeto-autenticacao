@@ -1,32 +1,53 @@
-# Projeto de Autenticação em Go
+# Projeto de Autenticação em Go(Golang)
 
 ## Descrição
 
-Este projeto implementa um **backend de autenticação** para aplicações web, fornecendo endpoints para **registro** e **login** de usuários. O objetivo é criar uma base segura de gerenciamento de usuários, com senhas hashadas, validação de dados e comunicação simples com frontend.
+É um **sistema completo de autenticação web**, oferecendo registro e login de usuários com **segurança e feedback visual moderno**.  
+O projeto combina:
+
+- Backend em **Go** com autenticação segura (senhas hashadas)  
+- Frontend responsivo com **HTML, CSS e JavaScript**  
+- Feedback de erros **inline e via toast** para uma melhor experiência do usuário
 
 ---
 
 ## Funcionalidades
 
-* Cadastro de usuários com validação de:
+### Cadastro de Usuário
+- Validações no frontend e backend:
+  - Nome obrigatório  
+  - Email obrigatório
+  - Senha obrigatória com mínimo de 6 caracteres  
+- Mensagens de erro **inline** abaixo dos campos  
+- Notificação **toast** para erros globais (ex.: “Usuário já cadastrado”)  
+- Senhas **hashadas com bcrypt** antes de salvar no banco  
 
-  * Nome, Senha e Email obrigatório
-  * Email com formato válido
-  * Senha mínima de 6 caracteres
-* Login de usuários com verificação de senha
-* Senhas armazenadas de forma segura usando **bcrypt**
+### Login de Usuário
+- Verificação de email e senha  
+- Mensagens de erro inline e via toast:
+  - “Email ou senha incorretos”  
+  - Campos obrigatórios destacados  
+- Redirecionamento para **dashboard** após login bem-sucedido  
+
+### Frontend Moderno
+- HTML, CSS e JS
+- Toasts para mensagens globais  
+- Validação em tempo real e feedback visual  
+- Layout responsivo  
 
 ---
 
 ## Tecnologias
 
-* **Backend:** Go
-* **Frontend:** HTML, CSS e JS
-* **Banco de dados:** SQLite
-* **Bibliotecas:**
-
-  * `github.com/mattn/go-sqlite3` → driver SQLite
-  * `golang.org/x/crypto/bcrypt` → para hash de senhas
+- **Backend:** Go  
+- **Frontend:** HTML, CSS, JavaScript
+- **Banco de dados:** SQLite  
+- **Bibliotecas Go:**
+  - `github.com/mattn/go-sqlite3` – driver SQLite  
+  - `golang.org/x/crypto/bcrypt` – hash de senhas  
+- **Bibliotecas Frontend:**
+  - FontAwesome – ícones  
+  - Google Fonts – tipografia Montserrat  
 
 ---
 
@@ -35,32 +56,35 @@ Este projeto implementa um **backend de autenticação** para aplicações web, 
 ```
 src
 ├── backend
-│   ├── main.go        # Inicializa o servidor, conecta ao banco de dados e registra endpoints
-│   ├── db.go          # Conexão com banco de dados SQLite
-│   ├── handlers.go    # Endpoints de login e registro e validações básicas
-│   └── auth.go        # Funções de autenticação, hash de senha
+│ ├── main.go # Inicializa servidor, conecta ao DB e registra endpoints
+│ ├── db.go # Conexão SQLite e inicialização de tabelas
+│ ├── handlers.go # Endpoints /register e /login com validação
+│ └── auth.go # Funções de autenticação e hash de senha
 │
 ├── database
-│   └── users.db       # Banco de dados SQLite (não versionado)
+│ └── users.db # Banco SQLite (não versionado)
 │
 ├── frontend
-│   ├── js
-│   │   ├── login.js       # Lógica de login e comunicação com /login
-│   │   └── register.js    # Lógica de cadastro e comunicação com /register
-│   │
-│   ├── pages
-│   │   ├── register.html  # Página de cadastro de usuários
-│   │   └── dashboard.html # Página principal após login
-│   │
-│   ├── style
-│   │   └── style.css      # Estilos globais do frontend
-│   │
-│   └── index.html         # Página inicial / login
+│ ├── js
+│ │ ├── register.js # Lógica de cadastro, fetch e validações
+│ │ ├── login.js # Lógica de login, fetch e feedback de erros
+│ │ └── functions.js # Funções utilitárias (toast, validação inline)
+│ │
+│ ├── pages
+│ │ ├── register.html # Página de cadastro
+│ │ └── dashboard.html # Página após login
+│ │
+│ ├── style
+│ │ ├── reset.css # Reset CSS
+│ │ ├── common.css # Estilos globais
+│ │ └── register.css # Estilos específicos do registro
+│ │
+│ └── index.html # Página inicial / login
 │
-├── .gitignore          # Ignora arquivos desnecessários 
-├── go.mod              # Módulos do Go (dependências)
-├── go.sum              
-└── README.md           
+├── .gitignore # Ignora DB e arquivos desnecessários
+├── go.mod # Módulos do Go
+├── go.sum
+README.md         
 ```
 
 ---
@@ -69,27 +93,36 @@ src
 
 1. **Clone o repositório**
 
+* git clone <URL_DO_REPOSITÓRIO>
+
+* cd <PASTA_DO_PROJETO>
+
 2. **Instale dependências do Go**
 
+* go mod tidy
+
 3. **Compile e rode o servidor**
+
+* cd src
+
+* go run backend/main.go backend/db.go backend/hanlers.go backend/auth.go
 
 * O backend ficará disponível em: `http://localhost:8080`
 
 4. **Frontend**:
 
-* Abra o HTML no navegador ou use um **servidor local**
+* Use um **servidor local**, por exemplo o Live Server. Pois para que os módulos JS funcionem (import/export), o HTML deve ser servido via HTTP, não diretamente com file://.
 
 ---
 
 ## Endpoints da API
 
-| Método | Endpoint  | Descrição                  |
-| ------ | --------- | -------------------------- |
-| POST   | /register | Cadastro de novo usuário   |
-| POST   | /login    | Login de usuário existente |
+### Cadastro de Usuário (`POST /register`)
 
-* **Body JSON esperado para registro:**
+**URL:**  
+`POST http://localhost:8080/register`
 
+**Body JSON esperado:**
 ```json
 {
   "name": "Seu Nome",
@@ -98,14 +131,36 @@ src
 }
 ```
 
-* **Body JSON esperado para login:**
+**Respostas possíveis:**
+| Status | Mensagem                              | Descrição                   |
+| ------ | ------------------------------------- | --------------------------- |
+| 200    | Cadastro realizado com sucesso        | Usuário criado corretamente |
+| 400    | Campo nome é obrigatório              | Nome não informado          |
+| 400    | Campo email é obrigatório             | Email não informado         |
+| 400    | Campo senha é obrigatório             | Senha não informada         |
+| 400    | Senha deve ter no mínimo 6 caracteres | Senha muito curta           |
+| 409    | Usuário já cadastrado                 | Email já existe no banco    |
 
+### Login de Usuário (`POST /login`)
+
+**URL:**  
+`POST http://localhost:8080/login`
+
+**Body JSON esperado:**
 ```json
 {
   "email": "email@exemplo.com",
   "password": "123456"
 }
 ```
+
+**Respostas possíveis:**
+| Status | Mensagem                              | Descrição                               |
+| ------ | ------------------------------------- | --------------------------------------- |
+| 200    | Login realizado com sucesso           | Login realizado com sucesso             |
+| 400    | Campo email é obrigatório             | Email não informado                     |
+| 400    | Campo senha é obrigatório             | Senha não informada                     |
+| 401    | Email ou senha incorretos             | Email inexistente ou senha incorreta    |
 
 ---
 
